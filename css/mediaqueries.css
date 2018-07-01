@@ -14,9 +14,18 @@
 /* Styles */
 }
 
-/* iPads (portrait and landscape) ----------- */
-@media only screen and (min-device-width : 768px) and (max-device-width : 1024px) {
-/* Styles */
+
+@media screen and (min-device-width : 660px) and (max-device-width : 1024px) {
+.restaurant-list-container{
+  justify-content: space-evenly;
+}
+#restaurants-list li{
+  max-width:45%;
+  flex-grow: 1;
+  flex-shrink: 0;
+  flex-basis: 45%;
+}
+
 }
 
 /* iPads (landscape) ----------- */

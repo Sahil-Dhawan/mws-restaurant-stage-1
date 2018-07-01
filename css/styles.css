@@ -154,8 +154,8 @@ nav h1 a {
   font-family: Arial,sans-serif;
 
   min-height: 380px;
-
-
+	text-align: center;
+	margin-bottom: 4%;
   width: 100%;
 }
 #restaurants-list .restaurant-img {
@@ -186,7 +186,7 @@ nav h1 a {
   color: #fff;
   display: inline-block;
   font-size: 10pt;
-  margin: 15px 0 0;
+  margin: 2% 0 2% 0;
   padding: 8px 30px 10px;
   text-align: center;
   text-decoration: none;
@@ -195,7 +195,7 @@ nav h1 a {
 .restaurant-list-container{
 	display: flex;
 	flex-wrap: wrap;
-	margin:8% auto;
+	margin:5% auto;
 	max-width: 90%;
 	padding:0% 7%;
 	list-style: none;
