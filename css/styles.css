@@ -57,6 +57,7 @@ nav {
 }
 nav h1 {
   margin: auto;
+	padding-top: 2%;
 }
 nav h1 a {
   color: #fff;
@@ -103,9 +104,19 @@ nav h1 a {
   width: 100%;
   background-color: #ccc;
 }
+.main-map-container{
+	display: flex;
+	flex-flow:column wrap;
+	margin:auto;
+
+
+}
 /* ====================== Restaurant Filtering ====================== */
 .filter-options {
-  width: 100%;
+
+	margin:auto;
+
+	padding: 5px;
 
   background-color: #3397DB;
   align-items: center;
@@ -126,9 +137,9 @@ nav h1 a {
   letter-spacing: 0;
   margin: 10px;
   padding: 0 10px;
-  width: 100%;
+  width: 90%;
 }
-
+#neighborhood
 /* ====================== Restaurant Listing ====================== */
 #restaurants-list {
   background-color: #f3f3f3;
@@ -180,6 +191,14 @@ nav h1 a {
   text-align: center;
   text-decoration: none;
   text-transform: uppercase;
+}
+.restaurant-list-container{
+	display: flex;
+	flex-wrap: wrap;
+	margin:8% auto;
+	max-width: 90%;
+	padding:0% 7%;
+	list-style: none;
 }
 
 /* ====================== Restaurant Details ====================== */
@@ -272,4 +291,9 @@ nav h1 a {
 }
 #restaurant-hours td {
   color: #666;
+}
+
+.filter-options-container{
+	display: flex;
+	flex-flow: column wrap;
 }
