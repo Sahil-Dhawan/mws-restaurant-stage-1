@@ -15,7 +15,7 @@
 }
 
 
-@media screen and (min-device-width : 660px) and (max-device-width : 1024px) {
+@media screen and (min-device-width : 695px) and (max-device-width : 1024px) {
 .restaurant-list-container{
   justify-content: space-evenly;
 }
