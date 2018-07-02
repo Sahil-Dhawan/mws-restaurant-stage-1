@@ -11,11 +11,15 @@ class DBHelper {
     let localhost=window.location.href.toString();
     localhost=localhost.substring(localhost.indexOf(":")+1);
   //  console.log(localhost+"before substr");
-  const port = localhost.substring(localhost.indexOf(":")) ;
+  let port="";
+  if(localhost.indexOf(":")==-1)
+  port = localhost.substr(localhost.indexOf(":"),localhost.indexOf("/")) ;
+  else
+  port = localhost.substr(localhost.indexOf(":"),5);
     localhost=localhost.substr(0,localhost.indexOf(":"));
 
-  //  console.log(port+"is port"); // Change this to your server port
-  //  console.log(localhost+"after substr");
+   console.log(port+"is port"); // Change this to your server port
+   console.log(localhost+"after substr");
     return `http:${localhost}${port}/data/restaurants.json`;
   }
 

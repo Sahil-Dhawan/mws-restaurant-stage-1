@@ -15,21 +15,70 @@
 }
 
 
-@media screen and (min-device-width : 695px) and (max-device-width : 1024px) {
-.restaurant-list-container{
-  justify-content: space-evenly;
-}
+@media screen and (min-device-width : 640px) and (max-device-width : 1024px) {
+
 #restaurants-list li{
   max-width:45%;
-  flex-grow: 1;
-  flex-shrink: 0;
-  flex-basis: 45%;
+
+
 }
 
 }
+@media screen and (min-device-width : 1025px) and (max-device-width : 1600px){
+
+  #restaurants-list li{
+    max-width:30%;
+
+  }
+}
+@media screen and (min-device-width : 1601px) and (max-device-width : 1920px){
+
+  #restaurants-list li{
+    max-width:20%;
+
+
+  }
+}
+@media screen and (min-device-width : 1921px) and (max-device-width : 2680px){
+
+  #restaurants-list li{
+    max-width:15%;
+
+
+  }
+}
+@media screen and (min-device-width : 2681px) {
+
+  #restaurants-list li{
+    max-width:10%;
+
+
+
+  }
+}
+@media screen and (min-device-width:630px) {
+  .restaurant-list-container{
+    justify-content: space-evenly;
+  }
+  .filter-options-container{
+    flex-direction: row;
+    justify-content: space-evenly;
+  }
+  .filter-options select{
+    width:30%;
+  }
+  #restaurants-list li{
+
+
+    flex-grow: 1;
+    flex-shrink: 0;
+  }
+
+}
+
 
 /* iPads (landscape) ----------- */
-@media only screen and (min-device-width : 768px) and (max-device-width : 1024px) and (orientation : landscape) {
+@media screen and (min-device-width : 768px) and (max-device-width : 1024px) and (orientation : landscape) {
 /* Styles */
 }
 
