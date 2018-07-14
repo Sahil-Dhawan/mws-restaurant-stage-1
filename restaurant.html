@@ -8,11 +8,13 @@
   <link rel="stylesheet" href="css/styles.css" type="text/css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css" integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ==" crossorigin=""/>
   <title>Restaurant Info</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
 <body class="inside">
   <!-- Beginning header -->
-  <header>
+  <header id="restaurant-header">
     <!-- Beginning nav -->
     <nav>
       <h1><a href="/">Restaurant Reviews</a></h1>
@@ -27,22 +29,34 @@
   <!-- End header -->
 
   <!-- Beginning main -->
-  <main id="maincontent">
+  <main id="maincontent" class="restaurant-main-content">
     <!-- Beginning map -->
     <section id="map-container" class="restaurant-map-container">
       <div id="map"></div>
+
     </section>
     <!-- End map -->
     <!-- Beginning restaurant -->
     <section id="restaurant-container">
-      <h1 id="restaurant-name"></h1>
+      <h2 id="restaurant-name"></h2>
+      <p id="restaurant-address"></p>
       <img id="restaurant-img">
       <p id="restaurant-cuisine"></p>
-      <p id="restaurant-address"></p>
-      <table id="restaurant-hours"></table>
+
+
     </section>
     <!-- end restaurant -->
     <!-- Beginning reviews -->
+    <section id="restaurant-hours-section">
+      <div class="restaurant-hours-container">
+        <label id="restaurant-hours-label" >Hours of Operation</label>
+        <div class="restaurant-hour-pad">
+        <table id="restaurant-hours" aria-labelledby="restaurant-hours-label"></table></div>
+
+      </div>
+
+    </section>
+
     <section id="reviews-container">
       <ul id="reviews-list"></ul>
     </section>

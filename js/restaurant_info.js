@@ -7,6 +7,9 @@ var newMap;
 document.addEventListener('DOMContentLoaded', (event) => {
   initMap();
 });
+let h = document.getElementById('restaurant-header').scrollHeight;
+document.getElementsByClassName('restaurant-main-content')[0].style.paddingTop =h+"px";
+ console.log("size"+document.getElementsByClassName('restaurant-main-content')[0].style.paddingTop+"h is"+h);
 
 /**
  * Initialize leaflet map
