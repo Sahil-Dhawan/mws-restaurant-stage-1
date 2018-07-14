@@ -333,6 +333,20 @@ nav h1 a {
 #reviews-list li p {
   margin: 0 0 10px;
 }
+#reviews-list li p:nth-child(1){
+	font-size: 120%;
+	font-weight: 600;
+	text-align: center;
+}
+#reviews-list li p:nth-child(2){
+	font-size: 110%;
+	font-weight: 400;
+	text-align: center;
+}
+#reviews-list li p:nth-child(3){
+	
+	text-align: center;
+}
 #restaurant-hours td {
   color: #666;
 }
