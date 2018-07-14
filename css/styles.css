@@ -256,11 +256,11 @@ nav h1 a {
 #restaurant-name {
   color: #f18200;
   font-family: Arial,sans-serif;
-  font-size: 25px;
-  font-weight: 200;
   letter-spacing: 0;
-  margin: 15px 10px;
+  margin: 2% 0;
+	padding:3%;
   text-transform: uppercase;
+	background-color: #eaeded;
 
 }
 #restaurant-img {
@@ -268,8 +268,8 @@ nav h1 a {
 	max-width: 800px;
 }
 #restaurant-address {
-  font-size: 20px;
-  font-weight: 650;
+  font-size: 18px;
+  font-weight: 600;
 }
 #restaurant-cuisine {
   background-color: #333;
@@ -308,14 +308,15 @@ nav h1 a {
 #reviews-container h2 {
   color: #f58500;
   font-size: 24px;
-  font-weight: 300;
+
   letter-spacing: -1px;
   padding-bottom: 1px;
 	text-align: center;
 	text-align: -webkit-center;
 }
 #reviews-list {
-  margin: 0;
+	margin: auto;
+	max-width:800px;
   padding: 0;
 }
 #reviews-list li {
