@@ -99,7 +99,7 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   const image = document.getElementById('restaurant-img');
   picture.className = 'restaurant-img';
   image.className = 'restaurant-img';
-  image.alt = `${restaurant.name} restaurant image`;
+  image.alt = `${restaurant.name} restaurant`;
   image.src = imgurl2x;
 
 

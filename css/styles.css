@@ -170,7 +170,7 @@ nav h1 a {
   min-height: 248px;
   min-width: 100%;
 }
-#restaurants-list li h1 {
+#restaurants-list li h2 {
   color: #f18200;
   font-family: Arial,sans-serif;
   font-size: 14px;
@@ -184,10 +184,11 @@ nav h1 a {
   margin: 0;
   font-size: 14px;
 }
-#restaurants-list li a {
+#restaurants-list li button {
   background-color: orange;
-  border-bottom: 3px solid #eee;
+	//border-bottom: 3px solid #eee;
   color: #fff;
+	border: none;
   display: inline-block;
   font-size: 14px;
   margin: 2% 0 2% 0;
@@ -344,7 +345,7 @@ nav h1 a {
 	text-align: center;
 }
 #reviews-list li p:nth-child(3){
-	
+
 	text-align: center;
 }
 #restaurant-hours td {
