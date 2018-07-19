@@ -18,8 +18,8 @@ class DBHelper {
   port = localhost.substr(localhost.indexOf(":"),5);
     localhost=localhost.substr(0,localhost.indexOf(":"));
 
-   console.log(port+"is port"); // Change this to your server port
-   console.log(localhost+"after substr");
+  // console.log(port+"is port"); // Change this to your server port
+  // console.log(localhost+"after substr");
     return `http:${localhost}${port}/data/restaurants.json`;
   }
 

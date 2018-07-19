@@ -1,6 +1,23 @@
 let restaurant;
 var newMap;
 
+/** Service Worker Registration
+      **/
+
+if (navigator.serviceWorker)
+  {
+    navigator.serviceWorker.register('/sw.js').then(function(){
+      // Registration was successful
+      console.log(`Registration of service worker successful`);
+  }, err =>
+      {
+      // registration failed
+      console.log(`Registration of service worker failed with error : ${err}`);
+      });
+  }
+
+
+
 /**
  * Initialize map as soon as the page is loaded.
  */
@@ -9,7 +26,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 });
 let h = document.getElementById('restaurant-header').scrollHeight;
 document.getElementsByClassName('restaurant-main-content')[0].style.paddingTop =h+"px";
- console.log("size"+document.getElementsByClassName('restaurant-main-content')[0].style.paddingTop+"h is"+h);
+ //console.log("size"+document.getElementsByClassName('restaurant-main-content')[0].style.paddingTop+"h is"+h);
 
 /**
  * Initialize leaflet map
