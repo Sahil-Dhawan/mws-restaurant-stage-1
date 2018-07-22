@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
   <!-- Normalize.css for better cross-browser consistency -->
@@ -13,6 +13,7 @@
 </head>
 
 <body class="inside">
+  <a href="#restaurant-container" class="skip-to-main">Skip to main content</a>
   <!-- Beginning header -->
   <header id="restaurant-header">
     <!-- Beginning nav -->
@@ -20,7 +21,7 @@
       <h1><a href="/">Restaurant Reviews</a></h1>
     </nav>
     <!-- Beginning breadcrumb -->
-    <ul id="breadcrumb" aria-label="" role="navigation">
+    <ul id="breadcrumb" role="navigation">
       <li><a href="/">Home</a></li>
     </ul>
     <!-- End breadcrumb -->
@@ -31,15 +32,16 @@
   <!-- Beginning main -->
   <main id="maincontent" class="restaurant-main-content">
     <!-- Beginning map -->
-    <section id="map-container" class="restaurant-map-container" aria-labelledby="map-label">
-      <label id="map-label" style="visibility:hidden;">Restaurant location map </label>
-      <div id="map"></div>
+    <section id="map-container" class="restaurant-map-container" >
+      <div id="map" aria-label="Restaurant location on map" role="application"><style>.leaflet-container a{
+      	color:#0075a4;
+
+      }</style></div>
 
     </section>
     <!-- End map -->
     <!-- Beginning restaurant -->
-    <section id="restaurant-container" aria-labelledby="restaurant-container-label">
-      <label id="restaurant-container-label" style="visibility:hidden;">Restaurant Listing</label>
+    <section id="restaurant-container" tabindex="0">
       <h2 id="restaurant-name"></h2>
       <p id="restaurant-address"></p>
       <picture id="restaurant-picture">
@@ -53,11 +55,11 @@
     </section>
     <!-- end restaurant -->
     <!-- Beginning reviews -->
-    <section id="restaurant-hours-section">
+    <section id="restaurant-hours-section" tabindex="0">
       <div class="restaurant-hours-container">
         <label id="restaurant-hours-label" >Hours of Operation</label>
         <div class="restaurant-hour-pad">
-        <table id="restaurant-hours" aria-labelledby="restaurant-hours-label"></table>
+        <table id="restaurant-hours"></table>
 
       </div>
 
@@ -65,7 +67,7 @@
 
     </section>
 
-    <section id="reviews-container">
+    <section id="reviews-container" tabindex="0">
       <ul id="reviews-list"></ul>
     </section>
     <!-- End reviews -->

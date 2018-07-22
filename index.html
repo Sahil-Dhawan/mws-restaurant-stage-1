@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
   <meta charset="utf-8">
@@ -12,29 +12,33 @@
 </head>
 
 <body>
+  <a href="#skipToMain" class="skip-to-main">Skip to main content</a>
   <header>
-    <nav>
+      <nav>
       <h1><a href="/">Restaurant Reviews</a></h1>
     </nav>
   </header>
 
   <main id="maincontent">
-    <section id="map-container" class="main-map-container">
-      <div id="map"></div>
+    <section id="map-container" class="main-map-container" aria-label="Map showing locations of all Restaurants" role='application'>
+      <div id="map" tabindex="0" aria-label="Map showing locations of all Restaurants" role='application'><style>.leaflet-container a{
+      	color:#0075a4;
+
+      }</style></div>
     </section>
-    <section>
+    <section id="skipToMain">
       <div class="filter-options filter-options-container">
         <h2>Filter Results</h2>
 
-        <select id="neighborhoods-select" name="neighborhoods" onchange="updateRestaurants()">
+        <select id="neighborhoods-select" name="neighborhoods" onchange="updateRestaurants()" aria-label="Restaurant Neighbourhood selector">
           <option value="all">All Neighborhoods</option>
         </select>
 
 
-        <select id="cuisines-select" name="cuisines" onchange="updateRestaurants()">
+        <select id="cuisines-select" name="cuisines" onchange="updateRestaurants()" aria-label="Cuising type selector">
           <option value="all">All Cuisines</option>
         </select>
-      
+
       </div>
       <ul id="restaurants-list" class="restaurant-list-container"></ul>
     </section>
