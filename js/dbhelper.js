@@ -1,4 +1,6 @@
 
+
+
 /**
  * Common database helper functions.
  */
@@ -36,6 +38,7 @@ static openDatabase() {
   }
   return idb.open('restaurants-idb', 1, function(upgradeDb) {
     let store = upgradeDb.createObjectStore('restaurants');
+    let review = upgradeDb.createObjectStore('reviews');
 
   });
 }
@@ -233,6 +236,29 @@ static openDatabase() {
       })
       marker.addTo(newMap);
     return marker;
+  }
+  static updatefavIDB(restaurant,fav){
+    const dbPromise = DBHelper.openDatabase();
+    DBHelper.get_idb_restaurants(dbPromise).then(function(restaurants){
+      if(restaurants && restaurants.length>0){
+        const updated_restaurants = restaurants.map(r => {
+          if(restaurant.id == r.id)
+          r.is_favorite=fav;
+          return r;
+        });
+        if (updated_restaurants) { // Got the restaurant
+          DBHelper.put_idb_restaurants(updated_restaurants,dbPromise);
+        } else { // Restaurant does not exist in the database
+          console.log('Restaurant does not exist in database');
+        }
+
+      }
+
+      else{
+        DBHelper.networkFetch(callback,dbPromise);
+      }
+    });
+
   }
   /* static mapMarkerForRestaurant(restaurant, map) {
     const marker = new google.maps.Marker({

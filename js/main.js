@@ -169,7 +169,9 @@ fillRestaurantsHTML = (restaurants = self.restaurants) => {
  * Create restaurant HTML.
  */
 createRestaurantHTML = (restaurant) => {
-  const li = document.createElement('li');
+  const li = document.createElement('div');
+  li.className='restaurant-list-div';
+  const li_list = document.createElement('li');
   li.setAttribute('tabindex',"0");
   const picture = document.createElement('picture');
   const source = document.createElement('source');
@@ -213,8 +215,81 @@ createRestaurantHTML = (restaurant) => {
   //more.href = DBHelper.urlForRestaurant(restaurant);
   li.append(more)
 
-  return li
+  const fav_btn = document.createElement('button');
+  fav_btn.id = `fav_btn-${restaurant.id}`;
+  fav_btn.className = 'fav_btn';
+  fav_btn.setAttribute(`aria-label`,`Button to set restaurant ${restaurant.name} as favorite`);
+  if(restaurant.is_favorite == 'false'){
+    fav_btn.innerHTML = '&#9825;';
+    fav_btn.className = 'fav_btn not_fav';
+  }
+  else {
+    fav_btn.innerHTML = '&#x1F493;';
+    fav_btn.className = 'fav_btn fav';
+  }
+
+  fav_btn.addEventListener('click', function(){
+    favRestaurant(restaurant)
+  });
+
+  li.append(fav_btn);
+  li_list.append(li);
+  return li_list;
 }
+
+/**
+* Function to Favorite the restaurants *
+**/
+
+// favourite your restaurant
+function favRestaurant(restaurant) {
+  let fav_btn = document.getElementById(`fav_btn-${restaurant.id}`);
+  let desc_toast = document.getElementById(`desc-toast`);
+  let toast = document.getElementById(`toast`);
+  if (fav_btn.className == 'fav_btn not_fav'){
+
+    fetch(`http://localhost:1337/restaurants/${restaurant.id}/?is_favorite=true`,{
+      method: 'PUT',
+      headers:{
+        'Content-Type': 'application/json'
+      }
+    }).then(res => res.json())
+    .then(function(){
+      fav_btn.innerHTML = '&#x1F493;';
+      fav_btn.className = 'fav_btn fav';
+      desc_toast.innerHTML = `Added to favourites`;
+      toast.className = `show`;
+      setTimeout(function(){
+        toast.className = toast.className.replace(`show`,``);
+      },5000);
+      DBHelper.updatefavIDB(restaurant,"true");
+    })
+    .catch(error => console.error('Error:', error));
+  }
+  else{
+    fetch(`http://localhost:1337/restaurants/${restaurant.id}/?is_favorite=false`,{
+      method: 'PUT',
+      headers:{
+        'Content-Type': 'application/json'
+      }
+    }).then(res => res.json())
+    .then(function (){
+      //change the css style of star icon from filled to blank
+      fav_btn.innerHTML = '&#9825;';
+      fav_btn.className = 'fav_btn not_fav';
+      desc_toast.innerHTML = `Removed from favourites`;
+      toast.className = `show`;
+      setTimeout(function(){
+        toast.className = toast.className.replace(`show`,``);
+      },5000);
+      DBHelper.updatefavIDB(restaurant,"false");
+    })
+    .catch(error => console.error('Error:', error));
+
+  }
+
+}
+
 
 /**
  * Add markers for current restaurants to the map.
