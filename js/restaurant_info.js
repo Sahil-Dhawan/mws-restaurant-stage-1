@@ -173,25 +173,31 @@ fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => 
 /**
  * Create all reviews HTML and add them to the webpage.
  */
-fillReviewsHTML = (reviews = self.restaurant.reviews) => {
+fillReviewsHTML = () => {
+  //let reviews=reviewsPromise.;
   const container = document.getElementById('reviews-container');
   const title = document.createElement('h2');
   title.innerHTML = 'REVIEWS';
   container.appendChild(title);
+  DBHelper.fetchReviews(self.restaurant).then(reviews => {
 
-  if (!reviews) {
-    const noReviews = document.createElement('p');
-    noReviews.innerHTML = 'No reviews yet!';
-    container.appendChild(noReviews);
-    noReviews.setAttribute('aria-label',` no reviews yet!`);
+    if (!reviews) {
+      const noReviews = document.createElement('p');
+      noReviews.innerHTML = 'No reviews yet!';
+      container.appendChild(noReviews);
+      noReviews.setAttribute('aria-label',` no reviews yet!`);
 
-    return;
-  }
-  const ul = document.getElementById('reviews-list');
-  reviews.forEach(review => {
-    ul.appendChild(createReviewHTML(review));
-  });
-  container.appendChild(ul);
+      return;
+    }
+    const ul = document.getElementById('reviews-list');
+    console.log(reviews);
+    reviews.forEach(review => {
+      ul.appendChild(createReviewHTML(review));
+    });
+    container.appendChild(ul);
+
+  })
+
 }
 
 /**

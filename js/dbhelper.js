@@ -38,7 +38,7 @@ static openDatabase() {
   }
   return idb.open('restaurants-idb', 1, function(upgradeDb) {
     let store = upgradeDb.createObjectStore('restaurants');
-    let review = upgradeDb.createObjectStore('reviews');
+    let reviews = upgradeDb.createObjectStore('reviews');
 
   });
 }
@@ -59,6 +59,24 @@ static openDatabase() {
     });
 
   }
+  /**
+   * Fetch all reviews of a particular restaurant.
+   */
+
+  static fetchReviews(restaurant) {
+
+      const reviewsURL = `http://localhost:1337/reviews/?restaurant_id=${restaurant.id}`;
+      const dbPromise = DBHelper.openDatabase();
+
+      return DBHelper.get_idb_reviews(dbPromise,restaurant).then(function(reviews){
+            if(reviews && reviews.length>0)
+              return reviews;
+            else {
+              return DBHelper.networkFetchReviews(dbPromise,restaurant,reviewsURL);
+            }
+          });
+  }
+
 
   static networkFetch(callback,dbPromise){
     fetch(DBHelper.DATABASE_URL).then(response => {
@@ -72,6 +90,20 @@ static openDatabase() {
       callback(`Error : ${error}`,null);
     });
   }
+
+
+    static networkFetchReviews(dbPromise,restaurant,reviewsURL){
+      return fetch(reviewsURL).then(response => {
+        if(!response) return;
+        return response.json();
+      }).then(reviews => {
+        if(!reviews)return;
+        DBHelper.put_idb_reviews(reviews,restaurant,dbPromise);
+        return reviews;
+      }).catch(error => {
+        console.log(`Error : ${error}`,null);
+      });
+    }
 
   /**
    * Fetch a restaurant by its ID.
@@ -211,6 +243,18 @@ static openDatabase() {
     })
   }
   /**
+  * get reviews from idb DATABASE
+  **/
+  static get_idb_reviews(dbPromise,restaurant){
+    return dbPromise.then(db => {
+      if(!db)return;
+      let tx=db.transaction('reviews');
+      let store=tx.objectStore('reviews');
+      return store.get(restaurant.id);
+
+    })
+  }
+  /**
   * update restaurants in idb DATABASE
   **/
   static put_idb_restaurants(restaurants,dbPromise){
@@ -219,6 +263,19 @@ static openDatabase() {
       let tx=db.transaction('restaurants','readwrite');
       let store=tx.objectStore('restaurants');
       return store.put(restaurants,'restaurants-list');
+      tx.complete;
+
+    })
+  }
+  /**
+  * update reviews in idb DATABASE
+  **/
+  static put_idb_reviews(reviews,restaurant,dbPromise){
+    return dbPromise.then(db => {
+      if(!db)return;
+      let tx=db.transaction('reviews','readwrite');
+      let store=tx.objectStore('reviews');
+      return store.put(reviews,restaurant.id);
       tx.complete;
 
     })
@@ -248,6 +305,7 @@ static openDatabase() {
         });
         if (updated_restaurants) { // Got the restaurant
           DBHelper.put_idb_restaurants(updated_restaurants,dbPromise);
+          console.log("Updated the restaurant favorite")
         } else { // Restaurant does not exist in the database
           console.log('Restaurant does not exist in database');
         }
