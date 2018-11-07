@@ -40,6 +40,7 @@ static openDatabase() {
     let store = upgradeDb.createObjectStore('restaurants');
     let reviews = upgradeDb.createObjectStore('reviews');
     let offlineData = upgradeDb.createObjectStore('offlineData');
+    let favOffline = upgradeDb.createObjectStore('favOffline');
 
   });
 }
@@ -235,9 +236,13 @@ static openDatabase() {
    * Restaurant image URL.
    */
    static imageUrlForRestaurantBanner(restaurant) {
+     if(restaurant.photograph==undefined)
+     return (`/img/banner/${restaurant.id}.jpg`);
      return (`/img/banner/${restaurant.photograph}.jpg`);
    }
    static imageUrlForRestaurantListing(restaurant) {
+     if(restaurant.photograph==undefined)
+     return (`/img/listing/${restaurant.id}.jpg`);
      return (`/img/listing/${restaurant.photograph}.jpg`);
    }
 
@@ -278,6 +283,18 @@ static openDatabase() {
     })
   }
   /**
+  * get offline favorites from idb DATABASE
+  **/
+  static get_idb_offline_favorites(dbPromise){
+    return dbPromise.then(db => {
+      if(!db)return;
+      let tx=db.transaction('favOffline');
+      let store=tx.objectStore('favOffline');
+      return store.get('favorites-list');
+
+    })
+  }
+  /**
   * update restaurants in idb DATABASE
   **/
   static put_idb_restaurants(restaurants,dbPromise){
@@ -313,8 +330,50 @@ static openDatabase() {
       let tx=db.transaction('offlineData','readwrite');
       let store=tx.objectStore('offlineData');
       return store.put(reviews,restaurant.id);
+      tx.complete;
     })
-    tx.complete;
+
+  }
+
+    /**
+    * update offline favorites after sync in idb DATABASE
+    **/
+  static put_idb_offline_favorites_sync(favorites,dbPromise){
+    return dbPromise.then(db => {
+      if(!db)return;
+      let tx=db.transaction('favOffline','readwrite');
+      let store=tx.objectStore('favOffline');
+      return store.put(favorites,'favorites-list');
+      tx.complete;
+    })
+
+  }
+
+  /**
+  * update offline favorites in idb DATABASE
+  **/
+
+  static put_idb_offline_favorites(favorites,dbPromise){
+    return dbPromise.then(db=>{
+      if(!db)return;
+      DBHelper.get_idb_offline_favorites(dbPromise).then(favoritesindb => {
+        if(favoritesindb){
+          console.log(favoritesindb);
+          favoritesindb.push(favorites);
+          favorites = favoritesindb;
+        }
+        else{
+          favoritesindb=[];
+          favoritesindb.push(favorites);
+          favorites = favoritesindb;
+        }
+        let tx=db.transaction('favOffline','readwrite');
+        let store=tx.objectStore('favOffline');
+        return store.put(favorites,'favorites-list');
+        tx.complete;
+    })
+  })
+
   }
 
 
@@ -378,6 +437,7 @@ static openDatabase() {
       }
 
       else{
+        console.log('in else of updatefavIDB');
         DBHelper.networkFetch(callback,dbPromise);
       }
     });

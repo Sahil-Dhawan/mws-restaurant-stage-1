@@ -19,6 +19,42 @@ var markers = []
    });
  }
 
+window.addEventListener('online',syncOfflineFavorites);
+
+function syncOfflineFavorites(){
+  let dbPromise = DBHelper.openDatabase();
+  console.log("online");
+  DBHelper.get_idb_offline_favorites(dbPromise).then(favorites =>{
+
+    if(favorites && favorites.length > 0){
+      favorites.forEach((favorite,i) => {
+        console.log(favorite);
+        console.log(i);
+        fetch(`http://localhost:1337/restaurants/${favorite.restaurant_id}/?is_favorite=${favorite.is_favorite}`,{
+          method: 'PUT',
+          headers:{
+            'Content-Type': 'application/json'
+          }
+        }).then(response => response.json()).then(function(response){
+
+                console.log("Favorite Submission successful");
+                    favorites.shift();
+                      DBHelper.put_idb_offline_favorites_sync(favorites,dbPromise);
+
+
+
+        }).catch(function(error){
+
+        return;
+      });
+    });
+    }
+        else{
+          console.log("no offline favorites left to be synced");
+        }
+      });
+
+}
 
 document.addEventListener('DOMContentLoaded', (event) => {
   initMap(); // added
@@ -218,14 +254,16 @@ createRestaurantHTML = (restaurant) => {
   const fav_btn = document.createElement('button');
   fav_btn.id = `fav_btn-${restaurant.id}`;
   fav_btn.className = 'fav_btn';
-  fav_btn.setAttribute(`aria-label`,`Button to set restaurant ${restaurant.name} as favorite`);
+
   if(restaurant.is_favorite == 'false'){
     fav_btn.innerHTML = '&#9825;';
     fav_btn.className = 'fav_btn not_fav';
+    fav_btn.setAttribute(`aria-label`,`Button to set restaurant ${restaurant.name} as favorite`);
   }
   else {
     fav_btn.innerHTML = '&#x1F493;';
     fav_btn.className = 'fav_btn fav';
+    fav_btn.setAttribute(`aria-label`,`Button to remove restaurant ${restaurant.name} from favorites`);
   }
 
   fav_btn.addEventListener('click', function(){
@@ -253,8 +291,7 @@ function favRestaurant(restaurant) {
       headers:{
         'Content-Type': 'application/json'
       }
-    }).then(res => res.json())
-    .then(function(){
+    }).then(response => response.json()).then(function(){
       fav_btn.innerHTML = '&#x1F493;';
       fav_btn.className = 'fav_btn fav';
       desc_toast.innerHTML = `Added to favourites`;
@@ -263,8 +300,23 @@ function favRestaurant(restaurant) {
         toast.className = toast.className.replace(`show`,``);
       },5000);
       DBHelper.updatefavIDB(restaurant,"true");
-    })
-    .catch(error => console.error('Error:', error));
+    }).catch(function(error){
+    let dbPromise = DBHelper.openDatabase();
+    let favorites = {
+      restaurant_id : restaurant.id,
+      is_favorite : 'true'
+    }
+    DBHelper.put_idb_offline_favorites(favorites,dbPromise);
+    fav_btn.innerHTML = '&#x1F493;';
+    fav_btn.className = 'fav_btn fav';
+    desc_toast.innerHTML = `Added to favourites`;
+    toast.className = `show`;
+    setTimeout(function(){
+      toast.className = toast.className.replace(`show`,``);
+    },5000);
+    DBHelper.updatefavIDB(restaurant,"true");
+    console.log("You are currently offline and the favorites would be synced with the server once you are back online");
+  });
   }
   else{
     fetch(`http://localhost:1337/restaurants/${restaurant.id}/?is_favorite=false`,{
@@ -272,8 +324,7 @@ function favRestaurant(restaurant) {
       headers:{
         'Content-Type': 'application/json'
       }
-    }).then(res => res.json())
-    .then(function (){
+    }).then(response => response.json()).then(function (){
       //change the css style of star icon from filled to blank
       fav_btn.innerHTML = '&#9825;';
       fav_btn.className = 'fav_btn not_fav';
@@ -283,10 +334,28 @@ function favRestaurant(restaurant) {
         toast.className = toast.className.replace(`show`,``);
       },5000);
       DBHelper.updatefavIDB(restaurant,"false");
-    })
-    .catch(error => console.error('Error:', error));
+    }).catch(function(error){
+    let dbPromise = DBHelper.openDatabase();
+    let favorites = {
+      restaurant_id : restaurant.id,
+      is_favorite : 'false'
+    }
+    DBHelper.put_idb_offline_favorites(favorites,dbPromise);
+    fav_btn.innerHTML = '&#9825;';
+    fav_btn.className = 'fav_btn not_fav';
+    desc_toast.innerHTML = `Removed from favourites`;
+    toast.className = `show`;
+    setTimeout(function(){
+      toast.className = toast.className.replace(`show`,``);
+    },5000);
+    DBHelper.updatefavIDB(restaurant,"false");
+    console.log("You are currently offline and the favorites would be synced with the server once you are back online");
+  });
+
 
   }
+
+
 
 }
 
