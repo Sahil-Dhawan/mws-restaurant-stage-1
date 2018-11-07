@@ -488,3 +488,100 @@ nav h1 a {
     from {bottom: 30px; opacity: 1;}
     to {bottom: 60px; opacity: 0;}
 }
+
+/*------------------------------ADD REVIEW---------------------------------------*/
+#reviews-add-container{
+	padding: 6% 5% 6%;
+}
+
+#reviews-add-container h2{
+	text-align: center;
+	font-size: 2em;
+	font-weight: bolder;
+}
+
+#review-form-container{
+	max-width: 800px;
+	margin: auto;
+	background: #F9F9F9;
+  padding: 25px;
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+
+}
+
+#review-form textarea {
+  height: 100px;
+  max-width: 100%;
+  resize: none;
+}
+
+#review-form button[type="submit"] {
+  cursor: pointer;
+  width: 100%;
+  border: none;
+  background: #252831;
+  color: #FFF;
+  margin: 0 0 5px;
+  padding: 10px;
+  font-size: 15px;
+	font-weight:500;
+}
+#review-form button[type="submit"]:hover {
+  background: #000000;
+  -webkit-transition: background 0.3s ease-in-out;
+  -moz-transition: background 0.3s ease-in-out;
+  transition: background-color 0.3s ease-in-out;
+}
+
+#review-form button[type="submit"]:active {
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+#review-form input:focus,
+#review-form textarea:focus {
+  outline: 0;
+  border: 1px solid #aaa;
+}
+
+#review-form input[type="text"],
+#review-form input[type="number"],
+#review-form textarea {
+  width: 95%;
+  border: 1px solid #ccc;
+  background: #FFF;
+  margin: 0 0 5px;
+  padding: 2.5%;
+}
+
+#review-form input[type="text"]:hover,
+#review-form input[type="number"]:hover,
+#review-form textarea:hover {
+  -webkit-transition: border-color 0.3s ease-in-out;
+  -moz-transition: border-color 0.3s ease-in-out;
+  transition: border-color 0.3s ease-in-out;
+  border: 1px solid #aaa;
+}
+
+
+::-webkit-input-placeholder {
+  color: #888;
+}
+
+:-moz-placeholder {
+  color: #888;
+}
+
+::-moz-placeholder {
+  color: #888;
+}
+
+:-ms-input-placeholder {
+  color: #888;
+}
+
+fieldset {
+  border: medium none !important;
+  margin: 0 0 10px;
+  min-width: 100%;
+  padding: 0;
+  width: 100%;
+}
