@@ -1,5 +1,7 @@
 let restaurant;
+
 var newMap;
+const reviewsURL='http://localhost:1337/reviews/';
 
 /** Service Worker Registration
       **/
@@ -15,8 +17,56 @@ if (navigator.serviceWorker)
       console.log(`Registration of service worker failed with error : ${err}`);
       });
   }
+/**
+* Offline capability for reviews
+*/
+
+window.addEventListener('online',syncOfflineData);
+
+function syncOfflineData(){
+let toSync;
+let dbPromise = DBHelper.openDatabase();
+console.log("online");
+DBHelper.get_idb_offline_reviews(dbPromise,self.restaurant).then(reviews =>{
+
+  if(reviews && reviews.length > 0){
+
+    reviews.forEach((review,i) =>{
+      //console.log(review);
+      console.log(i);
+      review.updatedAt= new Date().getTime();
+      fetch(reviewsURL,{
+        method: 'POST',
+        body: JSON.stringify(review),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+
+      }).then(function(response){
+        if(!response.ok) return;
+        else {
+            //  console.log(response);
+              console.log("Review Submission successful");
+                  reviews.shift();
+                    DBHelper.put_idb_offline_reviews_sync(reviews,self.restaurant,dbPromise);
 
 
+              //console.log(reviews);
+            }
+      }).catch(function(error){
+
+      return;
+    })
+
+
+  });
+
+
+  }
+  else console.log("no offline reviews left to be synced");
+})
+
+}
 
 /**
  * Initialize map as soon as the page is loaded.
@@ -194,11 +244,26 @@ fillReviewsHTML = () => {
     reviews.forEach(review => {
       ul.appendChild(createReviewHTML(review));
     });
+
     container.appendChild(ul);
 
-  })
+  }).then(function(){
+    DBHelper.fetchOfflineReviews(self.restaurant).then(offlineReviews => {
 
-}
+      if (!offlineReviews) {
+        return;
+      }
+      const ul = document.getElementById('reviews-list');
+      console.log(offlineReviews);
+      offlineReviews.forEach(review => {
+        ul.appendChild(createReviewHTML(review));
+      });
+
+      container.appendChild(ul);
+    }
+  )});
+  }
+
 
 /**
  * Create review HTML and add it to the webpage.
@@ -246,19 +311,43 @@ review_form.addEventListener('submit', event => {
     rating = ratings.value;
   }
   });
+
   const review = {
-    id:-1,
     restaurant_id: self.restaurant.id,
     name: review_form.querySelector('#input-name').value,
     createdAt: new Date().getTime(),
     updatedAt: new Date().getTime(),
-    rating: rating,
+    rating: parseInt(rating),
     comments: review_form.querySelector('#input-comments').value,
   }
 
   const ul = document.getElementById('reviews-list');
   ul.appendChild(createReviewHTML(review));
   review_form.reset();
+  const dbPromise = DBHelper.openDatabase();
+  DBHelper.get_idb_reviews(dbPromise,self.restaurant).then(reviews_in_db =>{
+    if(!reviews_in_db) reviews_in_db=[];
+    reviews_in_db.push(review);
+    DBHelper.put_idb_reviews(reviews_in_db,self.restaurant,dbPromise);
+  });
+  fetch(reviewsURL,{
+    method: 'POST',
+    body: JSON.stringify(review),
+    headers: {
+      'Content-Type': 'application/json'
+    }
+
+  }).then(function(response){
+    if(!response.ok) return;
+    else {
+          console.log(response);
+          window.alert("Review Submission successful");
+
+        }
+  }).catch(function(error){
+  DBHelper.put_idb_offline_reviews(review,self.restaurant,dbPromise);
+  window.alert("You are currently offline and the review would be synced with the server once you are back online");
+});
   console.log(review);
 
 });

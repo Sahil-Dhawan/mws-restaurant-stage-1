@@ -39,6 +39,7 @@ static openDatabase() {
   return idb.open('restaurants-idb', 1, function(upgradeDb) {
     let store = upgradeDb.createObjectStore('restaurants');
     let reviews = upgradeDb.createObjectStore('reviews');
+    let offlineData = upgradeDb.createObjectStore('offlineData');
 
   });
 }
@@ -75,6 +76,16 @@ static openDatabase() {
               return DBHelper.networkFetchReviews(dbPromise,restaurant,reviewsURL);
             }
           });
+  }
+  static fetchOfflineReviews(restaurant){
+    const dbPromise = DBHelper.openDatabase();
+    return DBHelper.get_idb_offline_reviews(dbPromise,restaurant).then(function(reviews){
+          if(reviews && reviews.length>0)
+            return reviews;
+          else {
+            console.log("No Offline reviews");
+          }
+        });
   }
 
 
@@ -255,6 +266,18 @@ static openDatabase() {
     })
   }
   /**
+  * get offline reviews from idb DATABASE
+  **/
+  static get_idb_offline_reviews(dbPromise,restaurant){
+    return dbPromise.then(db => {
+      if(!db)return;
+      let tx=db.transaction('offlineData');
+      let store=tx.objectStore('offlineData');
+      return store.get(restaurant.id);
+
+    })
+  }
+  /**
   * update restaurants in idb DATABASE
   **/
   static put_idb_restaurants(restaurants,dbPromise){
@@ -267,6 +290,7 @@ static openDatabase() {
 
     })
   }
+
   /**
   * update reviews in idb DATABASE
   **/
@@ -277,9 +301,50 @@ static openDatabase() {
       let store=tx.objectStore('reviews');
       return store.put(reviews,restaurant.id);
       tx.complete;
+    })
+  }
+
+  /**
+  * update offline reviews after sync in idb DATABASE
+  **/
+  static put_idb_offline_reviews_sync(reviews,restaurant,dbPromise){
+    return dbPromise.then(db => {
+      if(!db)return;
+      let tx=db.transaction('offlineData','readwrite');
+      let store=tx.objectStore('offlineData');
+      return store.put(reviews,restaurant.id);
+    })
+    tx.complete;
+  }
+
+
+  /**
+  * update offline reviews in idb DATABASE
+  **/
+  static put_idb_offline_reviews(reviews,restaurant,dbPromise){
+    return dbPromise.then(db => {
+      if(!db)return;
+      DBHelper.get_idb_offline_reviews(dbPromise,restaurant).then(reviewsindb =>{
+        if(reviewsindb){
+          console.log(reviewsindb);
+          reviewsindb.push(reviews);
+          reviews = reviewsindb;
+        }
+        else{
+          reviewsindb=[];
+          reviewsindb.push(reviews);
+          reviews = reviewsindb;
+        }
+        let tx=db.transaction('offlineData','readwrite');
+        let store=tx.objectStore('offlineData');
+        return store.put(reviews,restaurant.id);
+        tx.complete;
+      })
+
 
     })
   }
+
 
   /**
    * Map marker for a restaurant.
