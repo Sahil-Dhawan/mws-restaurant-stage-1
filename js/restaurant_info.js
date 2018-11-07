@@ -174,7 +174,7 @@ fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => 
  * Create all reviews HTML and add them to the webpage.
  */
 fillReviewsHTML = () => {
-  //let reviews=reviewsPromise.;
+
   const container = document.getElementById('reviews-container');
   const title = document.createElement('h2');
   title.innerHTML = 'REVIEWS';
@@ -228,6 +228,42 @@ createReviewHTML = (review) => {
 
   return li;
 }
+
+/**
+* Add Review entered by user
+*/
+
+const review_form = document.querySelector('#review-form');
+
+review_form.addEventListener('submit', event => {
+  event.preventDefault();
+  let rating=1;
+  const ratingarray = document.querySelectorAll('.rating-input');
+  ratingarray.forEach(ratings => {
+	if(ratings.checked)
+  {
+    console.log(ratings.value);
+    rating = ratings.value;
+  }
+  });
+  const review = {
+    id:-1,
+    restaurant_id: self.restaurant.id,
+    name: review_form.querySelector('#input-name').value,
+    createdAt: new Date().getTime(),
+    updatedAt: new Date().getTime(),
+    rating: rating,
+    comments: review_form.querySelector('#input-comments').value,
+  }
+
+  const ul = document.getElementById('reviews-list');
+  ul.appendChild(createReviewHTML(review));
+  review_form.reset();
+  console.log(review);
+
+});
+
+
 
 /**
  * Add restaurant name to the breadcrumb navigation menu
